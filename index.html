@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Guess Pictures Game</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: auto;
+        }
+      
+        h1 {
+            color: #333333;
+        }
+
+        #score {
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        #question {
+            display: none;
+        }
+
+        #question img {
+            max-width: 48%;
+            height: auto;
+            margin-bottom: 10px;
+            display: inline-block;
+            max-height: 300px;
+        }
+
+        #answer {
+            margin-top: 20px;
+            padding: 10px;
+            width: 250px;
+            font-size: 16px;
+        }
+
+        #message {
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        #result {
+            margin-top: 30px;
+            font-size: 18px;
+        }
+
+        #result span {
+            font-weight: bold;
+        }
+
+        #newGameBtn {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #submitBtn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        var questions = [
+            {
+                images: ['ក.png', 'Picture1.png', 'Picture1.png'],
+                answer: 'ក កម្ពុជា'
+            },
+            {
+                images: ['ខ.png', 'Picture1.png', 'ខ.png', 'Picture1.png'],
+                answer: 'ខ ខ្មែរ'
+            },
+            {
+                images: ['គ.png', 'Picture1.png', 'ខ.png', 'Picture1.png'],
+                answer: 'គ គំនិត'
+            },
+            {
+                images: ['ឃ.png', 'Picture1.png'],
+                answer: 'ឃ'
+            },
+            {
+                images: ['ង.png', 'Picture1.png', 'ខ.png', 'Picture1.png'],
+                answer: 'ង'
+            },
+            {
+                images: ['ច.png', 'Picture1.png'],
+                answer: 'ច'
+            },
+            {
+                images: ['ឆ.png', 'Picture1.png'],
+                answer: 'ឆ'
+            },
+            {
+                images: ['ជ.png', 'Picture1.png'],
+                answer: 'ជ'
+            },
+            {
+                images: ['ឈ.png', 'Picture1.png'],
+                answer: 'ឈ'
+            },
+            {
+                images: ['ញ.png', 'Picture1.png'],
+                answer: 'ញ'
+            },
+            {
+                images: ['ដ.png', 'Picture1.png'],
+                answer: 'ដ'
+            },
+            {
+                images: ['ឡងឌី.png', 'Picture1.png'],
+                answer: 'ឡងឌី'
+            },
+            // Add more questions here...
+        ];
+
+        var shuffledQuestions = [];
+        var currentQuestionIndex = 0;
+        var score = 0;
+        var correctCount = 0;
+        var incorrectCount = 0;
+
+        function shuffleQuestions() {
+    if (currentQuestionIndex >= questions.length) {
+        currentQuestionIndex = 0;
+    }
+    shuffledQuestions = questions.slice().sort(() => Math.random() - 0.5);
+}
+
+        // function checkAnswer() {
+        //   var answer = document.getElementById('answer').value.toLowerCase();
+        //   var currentQuestion = shuffledQuestions[currentQuestionIndex];
+        //   var messageLabel = document.getElementById('message');
+        //   if (answer === currentQuestion.answer) {
+        //     messageLabel.textContent = 'Congratulations!';
+        //     messageLabel.style.color = '#4CAF50';
+        //     score += 3;
+        //     correctCount++;
+        //   } else {
+        //     messageLabel.textContent = 'Incorrect answer!';
+        //     messageLabel.style.color = '#FF0000';
+        //     score -= 1;
+        //     incorrectCount++;
+        //   }
+        //   currentQuestionIndex++;
+
+        //   if (currentQuestionIndex < 10) {
+        //     showQuestion();
+        //   } else {
+        //     showResult();
+        //   }
+        // }
+
+        function checkAnswer() {
+            var answer = document.getElementById('answer');
+            var currentQuestion = shuffledQuestions[currentQuestionIndex];
+            var messageLabel = document.getElementById('message');
+            var correctSound = document.getElementById('correctSound');
+  var incorrectSound = document.getElementById('incorrectSound');
+            if (answer.value.toLowerCase() === currentQuestion.answer) {
+                messageLabel.textContent = 'Correct answer!';
+                messageLabel.style.color = '#4CAF50';
+                score += 1; // Assign 1 score for a correct answer
+                correctCount++;
+                correctSound.play(); // Play the correct sound
+            } else {
+                messageLabel.textContent = 'Incorrect answer!';
+                messageLabel.style.color = '#FF0000';
+                incorrectCount++;
+                incorrectSound.play(); // Play the incorrect sound
+            }
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < 10) {
+                answer.value = ''; // Clear the answer textbox
+                showQuestion();
+            } else {
+                answer.style.display = 'none'; // Hide the answer textbox
+                document.getElementById('submitBtn').style.display = 'none'; // Hide the submit button
+                showResult();
+            }
+        }
+
+        function showResult() {
+            var scoreLabel = document.getElementById('score');
+            var resultLabel = document.getElementById('result');
+            var newGameBtn = document.getElementById('newGameBtn');
+            var questionDiv = document.getElementById('question');
+            var answerInput = document.getElementById('answer');
+            var submitBtn = document.getElementById('submitBtn');
+            var messageLabel = document.getElementById('message');
+
+            scoreLabel.textContent = 'Total Score: ' + score;
+            resultLabel.innerHTML =
+                'Correct Answers: ' + correctCount + '<br>' +
+                'Incorrect Answers: ' + incorrectCount;
+
+            scoreLabel.style.display = 'block';
+            resultLabel.style.display = 'block';
+            newGameBtn.style.display = 'block';
+            questionDiv.style.display = 'none';
+            answerInput.style.display = 'none';
+            submitBtn.style.display = 'none';
+            messageLabel.style.display = 'none';
+        }
+
+        function showQuestion() {
+            var currentQuestion = shuffledQuestions[currentQuestionIndex];
+            var imagesHtml = '';
+            currentQuestion.images.forEach(function (image) {
+                imagesHtml += '    <img src="' + image + '" alt="Image">' +
+                    '</div>';
+            });
+            var questionDiv = document.getElementById('question');
+            questionDiv.innerHTML = imagesHtml;
+            questionDiv.style.display = 'block';
+        }
+
+        // function showResult() {
+        //   var scoreLabel = document.getElementById('score');
+        //   var resultLabel = document.getElementById('result');
+        //   var newGameBtn = document.getElementById('newGameBtn');
+
+        //   scoreLabel.textContent = 'Total Score: ' + score;
+        //   resultLabel.innerHTML = 'Total Questions: ' + questions.length + '<br>' +
+        //                           'Correct Answers: ' + correctCount + '<br>' +
+        //                           'Incorrect Answers: ' + incorrectCount;
+
+        //   scoreLabel.style.display = 'block';
+        //   resultLabel.style.display = 'block';
+        //   newGameBtn.style.display = 'block';
+        // }
+
+        function startNewGame() {
+    currentQuestionIndex = 0;
+    score = 0;
+    correctCount = 0;
+    incorrectCount = 0;
+    shuffleQuestions();
+    showQuestion();
+
+    var scoreLabel = document.getElementById('score');
+    var resultLabel = document.getElementById('result');
+    var newGameBtn = document.getElementById('newGameBtn');
+    var answerInput = document.getElementById('answer');
+    var submitBtn = document.getElementById('submitBtn');
+    var messageLabel = document.getElementById('message');
+
+    scoreLabel.style.display = 'none';
+    resultLabel.style.display = 'none';
+    newGameBtn.style.display = 'none';
+    answerInput.style.display = 'block'; // Show the answer textbox
+    submitBtn.style.display = 'block'; // Show the submit button
+    messageLabel.style.display = 'block';
+    answerInput.value = ''; // Clear the answer textbox
+}
+    </script>
+</head>
+
+<body>
+    <h1>Guess Pictures Game</h1>
+    <div id="score"></div>
+    <div id="question"></div>
+    <input type="text" id="answer" placeholder="Enter your answer...">
+    <button id="submitBtn" onclick="checkAnswer()">Submit</button>
+    <div id="message"></div>
+    <div id="result"></div>
+    <button id="newGameBtn" onclick="startNewGame()">Start New Game</button>
+
+    <!-- Sound -->
+    <audio id="correctSound">
+        <source src="sound/correct.mp3" type="audio/mpeg">
+      </audio>
+      
+      <audio id="incorrectSound">
+        <source src="sound/incorrect.mp3" type="audio/mpeg">
+      </audio>
+
+    <script>
+        shuffleQuestions();
+        showQuestion();
+    </script>
+</body>
+
+</html>
